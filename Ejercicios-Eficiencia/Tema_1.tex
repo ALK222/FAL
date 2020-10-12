@@ -1,0 +1,213 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{ragged2e}
+\usepackage{color}
+\usepackage{listings}
+\usepackage{float}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{customC}{
+  backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    xleftmargin=\parindent,
+    language=c++
+}
+
+\justifying
+\title{Ejercicios Eficiencia (FAL)}
+\author{A.L.K.}
+\date{Octubre 2020}
+
+\begin{document}
+\maketitle
+\newpage
+
+
+\textbf{1.} \textit{La siguiente función implementa un algoritmo de búsqueda secuencial con centinela en un array de enteros (el centinela es -1). Analiza la complejidad en tiempo de dicho algoritmo en el peor y el mejor caso}
+\begin{figure}[H]
+    \centering
+    \lstinputlisting[style=customC, xrightmargin=.5\textwidth]{code/Ejercicio_1.cpp}
+\end{figure}
+
+\underline{Mejor caso}: el elemento buscado es el primer elemento del array.
+El coste del algoritmo sería:
+\begin{itemize}
+    \item $K_{0} =$ Coste de asignación y de comprobaciones del bucle while
+\end{itemize}
+Para k > 0 T(n) = K (complejidad constante)
+\[
+    \lim_{n \rightarrow \infty} \frac{k}{1} = k > 0 \rightarrow \Theta(1)\left\{\begin{array}{l}
+        \Omega = 1 \\
+        0 = 1
+    \end{array}\right\}
+\]
+
+\underline{Peor caso}: el elemento no está en el array. El bucle dará tantas vueltas como elementos haya con un coste constante $K_{1}$ por vuelta.
+Los costes serán:
+\begin{itemize}
+    \item $K_{0} = $ coste de inicialización y finalización
+    \item $n* K_{1} = $ n veces el coste del bucle
+\end{itemize}
+
+\[
+    T(n) = K_{0} + n * K_{1} (complejidad \; n \; lineal)
+\]
+
+\[
+    \lim_{n \rightarrow \infty} \frac{K_{0} + n * K_{1}}{n} = \lim_{n \rightarrow \infty} K_{1} + \frac{K_{0}}{n } = K_{1} > 0 \rightarrow \Theta (n)
+\]
+
+\textbf{2.} \textit{Considera la siguiente función:}
+
+\begin{figure}[H]
+    \centering
+    \lstinputlisting[style=customC, xrightmargin=.35\textwidth]{code/Ejercicio_2.cpp}
+\end{figure}
+
+\textit{Esta función implementa el algoritmo de inserción de un elemento en una secuencia de enteros con posibles repeticiones, representada mediante el tipo:}
+\begin{figure}[H]
+    \centering
+    \lstinputlisting[style=customC, xrightmargin=.7\textwidth]{code/Ejercicio_2_tipo.cpp}
+\end{figure}
+\textit{(la funcion supone que en datos hay espacio suficiente). Analizar la complejidad en tiempo de dicho algoritmo en el peor y mejor caso.}
+\newpage
+
+\underline{Mejor caso}: el elemento es el mayor de la lista y por tanto se inserta al final, por tanto su complejidad será constante por los costes de inicialización y finalización.
+
+\underline{Peor caso}: el elemento es menor que todos los de la lista y el algoritmo se ejecuta n veces
+\[
+    T(n) = K_{1}*n + K_{0} \rightarrow T(n) \in H(n)
+\]
+
+\textbf{3.} Dada una secuencia de enteros \textbf{S}, se dice que la posición de i es singular cuando su valor coincide con la suma de todos los valores que lo preceden (es decir, cuando $S = \sum_{j= 0}^{i -1} S_{j}$). A continuación, se presentan cuatro algoritmos que determinan el número de posiciones singulares de una secuencia, almacenada en las primeras n posiciones de un array a:
+\section*{Algoritmo 1:}
+
+\begin{figure}[H]
+    \centering
+    \lstinputlisting[style=customC, xrightmargin=.4\textwidth]{code/Ejercicio_3_1.cpp}
+\end{figure}
+
+Coste bucle interno en cada interacción del externo: $i*K_{0}$(comprobación, suma e incremento). i varía de 0 a n-1.
+
+Coste total del bucle interno: $\sum_{i = 0}^{n -1} i * K_{0} = K_{0} * \frac{n(n-1)}{2}$
+
+\begin{itemize}
+    \item $K_{1} \rightarrow$ no se incrementa result
+    \item $K_{2} \rightarrow$ se incrementa result
+    \item $K_{3} \rightarrow$ coste inicialización y finalización
+\end{itemize}
+\underline{Mejor caso:}
+\[
+    E_{0}(n) = K_{0}\frac{n(n-1)}{2} + k_{3} + n*K_{1} \rightarrow \lim_{n \rightarrow \infty} \frac{\frac{k_{0}*n^{2}}{2} + n(K_{1} - \frac{K_{0}}{2})+ K_{3}}{n^{2}} = \frac{K_{0}}{2} > 0 \in \Theta (n^{2})
+\]
+
+\underline{Peor caso: }
+\[
+    E_{1}(n) = K_{0}\frac{n(n-1)}{2} + k_{3} + n*K_{2} \rightarrow \lim_{n \rightarrow \infty} \frac{\frac{k_{0}*n^{2}}{2} + n(K_{2} - \frac{K_{0}}{2})+ K_{3}}{n^{2}} = \frac{K_{0}}{2} > 0 \in \Theta (n^{2})
+\]
+
+$E_{0}(n) \leq T(n) \leq E_{1} \rightarrow \left\{\begin{array}{l}
+        T(n) \in \Omega(n^2) \\
+        T(n) \in 0(n^2)
+    \end{array}\right\} \Rightarrow T(n) \in \Theta (n^2)$
+
+\section*{Algoritmo 2:}
+\begin{figure}[H]
+    \centering
+    \lstinputlisting[style=customC, xrightmargin=.4\textwidth]{code/Ejercicio_3_2.cpp}
+\end{figure}
+
+\begin{itemize}
+    \item $K_0 \rightarrow$ result no se incrementa
+    \item $K_{1} \rightarrow$ result se incrementa
+    \item $K_{2} \rightarrow$ coste de inicialización y finalización
+\end{itemize}
+
+\underline{Mejor caso:}
+\[
+    E_{1}(n) = n*K_{0} + + K_{2} \rightarrow \lim_{n \rightarrow \infty} \frac{n*K_{0} + K_{2}}{n} = K_{0} > 0 \in \Theta (n)
+\]
+
+\underline{Peor caso: }
+\[
+    E_{1}(n) = n*K_{1} + + K_{2} \rightarrow \lim_{n \rightarrow \infty} \frac{n*K_{1} + K_{2}}{n} = K_{1} > 0 \in \Theta (n)
+\]
+
+$E_{0}(n) \leq T(n) \leq E_{1} \rightarrow \left\{\begin{array}{l}
+        T(n) \in \Omega(n) \\
+        T(n) \in 0(n)
+    \end{array}\right\} \Rightarrow T(n) \in \Theta (n)$
+
+
+\section*{Algoritmo 3:}
+\begin{figure}[H]
+    \centering
+    \lstinputlisting[style=customC, xrightmargin=.4\textwidth]{code/Ejercicio_3_3.cpp}
+\end{figure}
+
+Antes de incrementar i, hay que incrementar j i veces
+\begin{itemize}
+    \item $K_{0} \rightarrow$ coste iteración j, coste total: $K_{0}\frac{n(n-1)}{2}$
+    \item Iteraciones de i $\begin{array}{l}
+                  K_{1} \rightarrow no\; se\; incrementa\; result \\
+                  K_{2} \rightarrow no\; se\; incrementa\; result
+              \end{array}$
+    \item $K_{3} \rightarrow$ coste de inicialización y finalización
+\end{itemize}
+
+\underline{Mejor caso:}
+\underline{Mejor caso:}
+\[
+    E_{0}(n) = K_{0}\frac{n(n-1)}{2} + K_{1} + K_{3} \rightarrow \lim_{n \rightarrow \infty} \frac{\frac{k_{0}*n^{2}}{2} - n(\frac{K_{0}}{2})+ K_{3} + K_{1}}{n^{2}} = \frac{K_{0}}{2} > 0 \in \Theta (n^{2})
+\]
+
+\underline{Peor caso: }
+\[
+    E_{1}(n) = K_{0}\frac{n(n-1)}{2} + k_{3} + K_{2} \rightarrow \lim_{n \rightarrow \infty} \frac{\frac{k_{0}*n^{2}}{2} + n(\frac{K_{0}}{2})+ K_{3} + K_{2}}{n^{2}} = \frac{K_{0}}{2} > 0 \in \Theta (n^{2})
+\]
+
+$E_{0}(n) \leq T(n) \leq E_{1} \rightarrow \left\{\begin{array}{l}
+        T(n) \in \Omega(n^2) \\
+        T(n) \in 0(n^2)
+    \end{array}\right\} \Rightarrow T(n) \in \Theta (n^2)$
+
+\section*{Algoritmo 4:}
+\begin{figure}[H]
+    \centering
+    \lstinputlisting[style=customC, xrightmargin=.4\textwidth]{code/Ejercicio_3_4.cpp}
+\end{figure}
+
+Hay n incrementos de i como mucho.
+\begin{itemize}
+    \item $K_{minima} \rightarrow$ Trabajo constante mínimo antes de cada incremento
+    \item $K_{máxima} \rightarrow$ Trabajo constante máximo antes de cada incremento
+    \item $K_{i} \rightarrow$ Trabajo constante al final del algoritmo
+\end{itemize}
+
+$m(n) = n*K_{min} + K_{i} \rightarrow$ estimación optimista T(n)
+
+$p(n) = n*K_{max} + K_{i} \rightarrow$ estimación pesimista T(n)
+
+$m(n), p(n) \in \Theta(n)$
+
+$m(n) \leq T(n) \leq p(n) \rightarrow T(n) \in \Theta (n)$
+\end{document}
