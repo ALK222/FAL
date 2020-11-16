@@ -21,16 +21,15 @@ const int TMAX = 1000000; // No habr� vectores de m�s de un mill�n de elem
 
 PRECONDICION DE LA FUNCION: 
   ---Escribe aqu� la precondici�n de la funci�n.
-    El tamaño del array entre 0 TMAX y que n != -1
+    vector size = n : 0 <= n <= tam(a)
 
 */
 bool divertida(const int a[], int n);
 
-/*
+/**
 POSTCONDICION DE LA FUNCION: 
- 
-  Q: { resul = (  (PARATODO i:0<=i<n:(SUMA j:0<=j<=i:a[i])>=0) && ( (SUMA i:0<=i<n:a[i])=0 ) ) }
-   
+ *
+  *Q: { resul = (  (PARATODO i:0<=i<n:(SUMA j:0<=j<=i:a[i])>=0) && ( (SUMA i:0<=i<n:a[i])=0 ) ) }
  */
 
 bool divertida(const int a[], int n)
