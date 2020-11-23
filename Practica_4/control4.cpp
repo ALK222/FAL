@@ -31,7 +31,7 @@ POSTCONDICION DE LA FUNCION:
   -- Escribe aqu� la postcondici�n de la funci�n. Para referirte
   -- al resultado puedes usar la pseudovariable 'resul'
 
-  result = PARATODO i: SUMA i : a_0 +...+ a_i <= k
+  result = PARATODO i: 0 <i < n :SUMA paratodo j:  :0<= j < i: a_j <= k
 
  */
 
@@ -42,7 +42,6 @@ POSTCONDICION DE LA FUNCION:
      --ENTRADA: a, n, k
      --SALIDA: max_total
      --CONTROL: i para recorrer todo el array
-                j para recorrer los siguientes numero a i
 
      -- suma y total para almacenar datos de la suma del peso
 
@@ -74,7 +73,6 @@ POSTCONDICION DE LA FUNCION:
 
   Paso 6. Justificaci�n de que el algoritmo siempre termina.
   En cada iteración aumentamos i y, por lo tanto podemos tomar como expresion de cota n - i
-  en cada iteracion del bucle interno aumentamos j por lo que la cota puede ser i - j
 
   Paso 7. Complejidad:
 
@@ -88,7 +86,7 @@ POSTCONDICION DE LA FUNCION:
    PEOR CASO:
 
    n > 1
-   TM = lim n=> infinito C_0 + n*(n-1)* C_1 => O(n^2) orden cuadratico
+   TM = lim n=> infinito C_0 + n*C_1 = C_1 = O(n) orden lineal
 
   */
 
@@ -96,28 +94,27 @@ int llena_mochila(const int a[], int n, int k)
 {
     // A IMPLEMENTAR
     int max_total = 0;
-    int i = 0;
+    int i = n - 1;
     int suma = 0;
-    int total = 0;
-    while (i <= n && (n - i + 1) - max_total >= 0)
+    int total = 1;
+    int res = n - 1;
+    while (i >= 0)
     {
-        if (suma <= k - a[i])
+        suma += a[i];
+
+        if (suma > k)
         {
-            suma += a[i];
-            total++;
-        }
-        else
-        {
-            i -= total;
-            suma = 0;
-            total = 0;
+            suma = suma - a[res]; // le restamos el ultimo numero comprobado antes de que suma > k
+
+            total -= 1;
+            res--;
         }
         if (total > max_total)
         {
             max_total = total;
         }
-
-        i++;
+        total++;
+        i--;
     }
 
     return max_total;
