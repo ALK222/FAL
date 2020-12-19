@@ -36,15 +36,27 @@ indica: (i) su tipo; (ii) su nombre; (iii) si es un par�metro
 de entrada, de salida, o de entrada / salida; (iv) su prop�sito,
 descrito de manera clara y concisa.
 
+- n <t_num> entrada: numero que queremos calcular
+- c <t_num> salida: numero total de numeros singulares menores que n
+- es_singular <bool> salida: será cierto si n es singular, falso en cualquier otro caso
+- d_mas_sig <int> salida: digito mas significativo de n
 
 (2) An�lisis de casos:
 
 (2.1) Casos base
-n <= 10: num_sing = n;
-
+n <= 9:
+c = n
+es_singular = true
+d_mas_sig = n
 
 (2.2) Casos recursivos
-n >= 10 : num_sing = (PARATODO x: x_1 != x_2, x_3 ... x_n)
+n > 9 :
+Resolvemos el problema para n/10. sean c', es_singular' y d_mas_sig' los resultados devueltos
+(c': cantidad de numeros singulares menores que n/10, es_singular': si n/10 es singular
+d_mas_sig': digito mas significativo de n/10)
+
+c = 9 * c' + 1 + {(n%10) si es_singular' && n %10 <= d_mas_sig' || 
+(n % 10 - 1) si es_singular y n%10 > d_mas_sig || 0 en cualquier otro caso}
 
 (3) En caso de utilizar una generalizacion, definici�n por inmersi�n
 del algoritmo. Describe de manera clara y concisa c�mo se lleva a
@@ -58,56 +70,40 @@ en cuanto finaliza la generalizacion, ya obtenemos en c el dato final buscado
 
 */
 
-t_num digito_mas_significativo_n(t_num n)
+void cuenta_singulares_menoresque(t_num n, t_num &c, bool &es_singular, int &d_mas_sig)
 {
-	while (n > 9)
+	if (n <= 9)
 	{
-		n = n / 10;
-	}
-	return n;
-}
-
-void es_singular_n(t_num n, t_num &c, bool &ok, t_num msd)
-{
-	if (n == 0)
-	{
-		c = 1;
-		ok = false;
-	}
-	else if (n < 10)
-	{
-		c += max((t_num)0, (t_num)(n));
-		ok = true;
+		c = n;
+		es_singular = true;
+		d_mas_sig = (int)n;
 	}
 	else
 	{
-
-		es_singular_n(n / 10, c, ok, msd);
+		cuenta_singulares_menoresque(n / 10, c, es_singular, d_mas_sig);
 		c *= 9;
-		if (n >= 100)
+		c++;
+		if (es_singular)
 		{
-			c += n / 10;
+			if (n % 10 <= d_mas_sig)
+			{
+				c += n % 10;
+			}
+			else
+			{
+				c += (n % 10 - 1);
+			}
 		}
-		else
-		{
-			ok = ok && (n % 10 != msd);
-			c += (ok ? max((t_num)0, (t_num)(n % 10)) : 1);
-		}
-
-		//ok = ok && (n % 10 != msd);
+		es_singular = es_singular && (n % 10 != d_mas_sig);
 	}
 }
-
 t_num num_singulares_menoresque(t_num n)
 {
-	// Punto de entrada al algoritmo.
-	// A implementar
-	t_num num = 0;
-	bool prueba1 = false;
-	t_num msd = digito_mas_significativo_n(n);
-
-	es_singular_n(n, num, prueba1, msd);
-	return num;
+	t_num c;
+	bool es_singular;
+	int d_mas_sig;
+	cuenta_singulares_menoresque(n, c, es_singular, d_mas_sig);
+	return c;
 }
 
 /*
