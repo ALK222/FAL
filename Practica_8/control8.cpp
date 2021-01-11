@@ -67,7 +67,7 @@ Para obtener el resultado tenemos que sumar sus afinidades dos a dos, es decir [
 bool contiene(int parejas[MAX_CLIENTES], unsigned int n, int cliente)
 {
     bool enc = false;
-    int c = 0;
+    unsigned int c = 0;
     while (!enc && c < n)
     {
         enc = parejas[c] == cliente;
@@ -101,7 +101,7 @@ int afinidad(const unsigned int afinidades[MAX_CLIENTES][MAX_CLIENTES], int pare
     return hay_pareja ? k : 0;
 }
 
-void encuentra_pareja(const unsigned int afinidades[MAX_CLIENTES][MAX_CLIENTES], unsigned int num_cliente, int parejas[MAX_CLIENTES], bool &hay_pareja, int mejor_pareja[MAX_CLIENTES], int total_clientes)
+void encuentra_pareja(const unsigned int afinidades[MAX_CLIENTES][MAX_CLIENTES], unsigned int num_cliente, int parejas[MAX_CLIENTES], bool &hay_pareja, int mejor_pareja[MAX_CLIENTES], unsigned int total_clientes)
 {
     if (num_cliente == total_clientes)
     {
@@ -130,11 +130,16 @@ int maxima_afinidad(const tMatrizAfinidad &as)
     // (ver definici�n de tMatrizAfinidad). Una vez finalizado el algoritmo,
     // deber� devolverse el valor pedido. Pueden definirse todas las
     // funciones auxiliares que se considere oportuno.
+    if (as.n_clientes <= 0 || as.n_clientes % 2 != 0)
+    {
+        return 0;
+    }
     int mejor_pareja[MAX_CLIENTES];
     int total_parejas[MAX_CLIENTES];
     bool hay_pareja = false;
     total_parejas[0] = 0;
     encuentra_pareja(as.afinidades, 1, total_parejas, hay_pareja, mejor_pareja, as.n_clientes);
+    int prueba = afinidad(as.afinidades, total_parejas, as.n_clientes);
     return afinidad(as.afinidades, mejor_pareja, as.n_clientes);
 }
 
