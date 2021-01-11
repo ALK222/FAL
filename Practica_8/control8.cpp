@@ -87,11 +87,18 @@ void actualiza_parejas(int parejas[MAX_CLIENTES], int mejor_parejas[MAX_CLIENTES
 int afinidad(const unsigned int afinidades[MAX_CLIENTES][MAX_CLIENTES], int parejas[MAX_CLIENTES], int total_clientes)
 {
     int k = 0;
-    for (int i = 1; i < total_clientes; i += 2)
+    bool hay_pareja = true;
+    unsigned int i = 1;
+    while (hay_pareja && i <= total_clientes - 1)
     {
-        k += afinidades[parejas[i]][parejas[i - 1]];
+        if (afinidades[parejas[i]][parejas[i - 1]] <= 0 || afinidades[parejas[i - 1]][parejas[i]] <= 0)
+        {
+            hay_pareja = false;
+        }
+        k += afinidades[parejas[i]][parejas[i - 1]] + afinidades[parejas[i - 1]][parejas[i]];
+        i += 2;
     }
-    return k;
+    return hay_pareja ? k : 0;
 }
 
 void encuentra_pareja(const unsigned int afinidades[MAX_CLIENTES][MAX_CLIENTES], unsigned int num_cliente, int parejas[MAX_CLIENTES], bool &hay_pareja, int mejor_pareja[MAX_CLIENTES], int total_clientes)
@@ -128,18 +135,7 @@ int maxima_afinidad(const tMatrizAfinidad &as)
     bool hay_pareja = false;
     total_parejas[0] = 0;
     encuentra_pareja(as.afinidades, 1, total_parejas, hay_pareja, mejor_pareja, as.n_clientes);
-    unsigned int total = 0;
-    unsigned int i = 1;
-    while (hay_pareja && i <= as.n_clientes - 1)
-    {
-        if (as.afinidades[mejor_pareja[i]][mejor_pareja[i - 1]] <= 0 || as.afinidades[mejor_pareja[i - 1]][mejor_pareja[i]] <= 0)
-        {
-            hay_pareja = false;
-        }
-        total += as.afinidades[mejor_pareja[i]][mejor_pareja[i - 1]] + as.afinidades[mejor_pareja[i - 1]][mejor_pareja[i]];
-        i += 2;
-    }
-    return hay_pareja && as.n_clientes % 2 == 0 ? total : 0;
+    return afinidad(as.afinidades, mejor_pareja, as.n_clientes);
 }
 
 void ejecuta_caso()
