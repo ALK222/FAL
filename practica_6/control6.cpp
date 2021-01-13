@@ -75,19 +75,19 @@ void cuenta_singulares_menoresque(t_num n, t_num &c, bool &es_singular, int &d_m
 	if (n <= 9)
 	{
 		c = n;
-		ok = true;
-		msd = n;
+		es_singular = true;
+		d_mas_sig = n;
 	}
 	else
 	{
-		es_singular_n(n / 10, c, ok, msd);
+		cuenta_singulares_menoresque(n / 10, c, es_singular, d_mas_sig);
 		c *= 9;
 		c++;
-		if (ok)
+		if (es_singular)
 		{
-			c += (n % 10 <= msd ? (n % 10) : (n % 10 - 1));
+			c += (n % 10 <= d_mas_sig ? (n % 10) : (n % 10 - 1));
 		}
-		ok = ok && (n % 10 != msd);
+		es_singular = es_singular && (n % 10 != d_mas_sig);
 	}
 }
 t_num num_singulares_menoresque(t_num n)
