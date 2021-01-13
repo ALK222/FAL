@@ -71,9 +71,8 @@ void cuenta_alternados(t_num n, t_num &c, bool &es_alternado, int &d_anterior)
     }
     else
     {
-        cuenta_alternados(n / 10 - 1, c, es_alternado, d_anterior);
-        if (n % 10)
-            n--;
+        cuenta_alternados(n / 10, c, es_alternado, d_anterior);
+        c--;
         c *= 5;
         c += 10;
         d_anterior = n % 10;
