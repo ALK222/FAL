@@ -59,7 +59,7 @@ void calcular_nota(const tInfoTema info_temas[], int temario_actual, float tiemp
 {
     if (temario_actual == 0)
     {
-        if ((nota_primero + nota_segundo) / 2 > nota_max && tiempo_usado <= tiempo_disponible && nota_primero > 5 && nota_segundo > 5)
+        if ((nota_primero + nota_segundo) / 2 > nota_max && nota_primero >= 5 && nota_segundo >= 5)
         {
             actualizar_mejor_nota(nota_primero, nota_segundo, nota_max);
         }
