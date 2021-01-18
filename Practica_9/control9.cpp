@@ -57,7 +57,7 @@ void actualizar_mejor_nota(const float prim_nota, const float seg_nota, float &m
 
 void calcular_nota(const tInfoTema info_temas[], int temario_actual, float tiempo_disponible, float &nota_primero, float &nota_segundo, float &nota_max, float &tiempo_usado, int total_temas)
 {
-    if (temario_actual == 0)
+    if (temario_actual == -1)
     {
         if ((nota_primero + nota_segundo) / 2 > nota_max && nota_primero >= 5 && nota_segundo >= 5)
         {
