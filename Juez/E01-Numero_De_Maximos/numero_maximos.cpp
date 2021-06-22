@@ -11,28 +11,27 @@ void resuelveCaso()
 {
     int puntActual;
     int personasConMaximaPunt = 0;
-    int maxPuntuacion = 0;
+    int maxPuntuacion;
 
     bool nuevoMaximo = false;
 
     std::cin >> puntActual;
 
+    maxPuntuacion = puntActual;
+
     while (puntActual != 0)
     {
         nuevoMaximo = puntActual > maxPuntuacion;
 
+        maxPuntuacion = std::max(puntActual, maxPuntuacion);
+
         if (nuevoMaximo)
         {
-            maxPuntuacion = puntActual;
             personasConMaximaPunt = 1;
-            nuevoMaximo = false;
         }
-        else
+        else if (puntActual == maxPuntuacion)
         {
-            if (puntActual == maxPuntuacion)
-            {
-                personasConMaximaPunt++;
-            }
+            personasConMaximaPunt++;
         }
 
         std::cin >> puntActual;
