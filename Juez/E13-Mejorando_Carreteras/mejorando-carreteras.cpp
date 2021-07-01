@@ -32,6 +32,7 @@ int resolver(std::vector<int> const &v)
         else
         {
             repAct = 1;
+            aux = i;
         }
     }
     return max;
