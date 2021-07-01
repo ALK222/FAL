@@ -7,8 +7,14 @@
 #include <vector>
 
 // Explicación del algoritmo utilizado
+/*
+    El algoritmo recorre el vector de alturas de edificios comprobando si la nave estaria oculta.
 
-// Coste del algoritmo utilizado
+    Si la altura del edificio la racha de edificios se alarga, 
+    si la racha es mayor que la anterior se actualiza la posicion
+*/
+
+// Coste del algoritmo utilizado: O(n), siendo n el numero de edificios en el vector
 
 // La función recibe un vector con las alturas de los edificios, y la altura de la nave que realizará el rescate
 // Devuelve las posiciones de inicio y fin del segmento máximo encontrado.
