@@ -1,9 +1,8 @@
 //*****************
 // IMPORTANTE
 //
-// Nombre y apellidos del alumno
-// Usuario del juez de clase
-// Usuario del juez de examen que has utilizado en la prueba de hoy
+// Nombre y apellidos del alumno Alejandro Barrachina Argudo
+// Usuario del juez de clase A81
 //
 //***************************************************
 
