@@ -42,34 +42,25 @@ tSol resolver(std::vector<int> const &v)
         if (v[i] <= best)
         {
             ++contFail;
-            if (sol.ini != i - contFail + 1)
+            if (contFail >= sol.maxPruebasFallidas)
             {
-                sol.ini = i - contFail + 1;
+                sol = {contFail, i - contFail + 1};
             }
         }
         else
         {
-            if (v[i] > best)
-            {
-                best = v[i];
-                if (contFail > sol.maxPruebasFallidas)
-                {
-                    sol.maxPruebasFallidas = contFail;
-                    sol.ini = i - sol.maxPruebasFallidas + 1;
-                }
-                contFail = 0;
-            }
+            best = v[i];
+            contFail = 0;
         }
     }
     if (sol.maxPruebasFallidas == -1)
     {
         sol.maxPruebasFallidas = contFail;
     }
-    else if (sol.maxPruebasFallidas == 0)
+    if (sol.maxPruebasFallidas == 0)
     {
         sol.ini = v.size();
     }
-
     return sol;
 }
 
