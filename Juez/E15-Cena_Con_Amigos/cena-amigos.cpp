@@ -35,7 +35,11 @@ tSol resolver(std::vector<int> const &v)
         sumaActual += v[i];
         if (sumaActual > 0)
         {
-            ini = i;
+            if (contSec == 0)
+            {
+                ini = i;
+            }
+
             contSec++;
 
             if (sumaActual > sol.sumaMaxSub)

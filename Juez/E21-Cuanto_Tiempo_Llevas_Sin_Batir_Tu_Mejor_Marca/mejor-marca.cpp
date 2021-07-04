@@ -28,10 +28,12 @@ struct tSol
 };
 
 // Aqui la función implementada por el alumno para resolver el problema
-auto resolver(std::vector<int> const &v)
+tSol resolver(std::vector<int> const &v)
 {
     int best = v[0];
     int contFail = 0;
+    int ini = 0;
+    int maxMalas = -1;
 
     tSol sol;
 
