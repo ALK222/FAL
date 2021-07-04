@@ -6,21 +6,28 @@
 #include <vector>
 
 // Aqui la función implementada por el alumno para resolver el problema
-auto resolver(long long int num, long long int sum, long long int pow)
+auto resolver(long long int num)
 {
     if (num < 10)
     {
-        return num % 2 == 1 ? (num * pow) + sum : sum;
+        if (num % 2 == 1)
+        {
+            return num;
+        }
+        else
+        {
+            return (long long int)0;
+        }
     }
     else
     {
         if ((num % 10) % 2 == 1)
         {
-            return resolver((num / 10), (num % 10) * pow + sum, pow * 10);
+            return resolver(num / 10) * 10 + num % 10;
         }
         else
         {
-            return resolver(num / 10, sum, pow);
+            return resolver(num / 10);
         }
     }
 }
@@ -35,7 +42,7 @@ bool resuelveCaso()
         return false;
     }
 
-    auto sol = resolver(num, 0, 1);
+    auto sol = resolver(num);
 
     // escribir sol
     std::cout << sol << '\n';

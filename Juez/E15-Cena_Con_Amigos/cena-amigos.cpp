@@ -18,32 +18,52 @@
 
 struct tSol
 {
-    int sumaMaxSub = INT_MIN;
+    int sumaMaxSub = 0;
     int diaInicio = 0;
     int subSecSize = 0;
 };
 
-void resolver(std::vector<int> const &v, tSol &sol)
+tSol resolver(std::vector<int> const &v)
 {
+    tSol sol;
     int sumaActual = 0;
     int contSec = 0;
+    int ini = 0;
 
     for (int i = 0; i < v.size(); ++i)
     {
         sumaActual += v[i];
-        ++contSec;
-        if (sumaActual <= v[i])
+        if (sumaActual > 0)
         {
-            sumaActual = v[i];
-            contSec = 1;
+            ini = i;
+            contSec++;
+
+            if (sumaActual > sol.sumaMaxSub)
+            {
+                sol.sumaMaxSub = sumaActual;
+                sol.subSecSize = contSec;
+                sol.diaInicio = ini;
+            }
         }
-        if (sumaActual > sol.sumaMaxSub)
+        else if (sumaActual > sol.sumaMaxSub)
+        {
+            sol.sumaMaxSub = sumaActual;
+            sol.subSecSize = contSec;
+            sol.diaInicio = ini;
+        }
+        else
+        {
+            contSec = 0;
+            sumaActual = 0;
+        }
+        if (sol.sumaMaxSub == sumaActual && sol.subSecSize > contSec)
         {
             sol.subSecSize = contSec;
-            sol.diaInicio = i - sol.subSecSize + 1;
-            sol.sumaMaxSub = sumaActual;
+            sol.diaInicio = ini;
         }
     }
+
+    return sol;
 }
 
 // Entrada y salida de datos
@@ -66,8 +86,7 @@ bool resuelveCaso()
         std::cin >> i;
     }
 
-    tSol sol;
-    resolver(gramos, sol);
+    tSol sol = resolver(gramos);
 
     std::cout << sol.sumaMaxSub << ' ' << sol.diaInicio << ' ' << sol.subSecSize << '\n';
 
