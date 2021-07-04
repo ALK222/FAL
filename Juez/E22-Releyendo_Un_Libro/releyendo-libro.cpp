@@ -34,6 +34,8 @@ auto resolver(std::vector<int> const &v, int const &tramo)
 
     int interesante = 0;
 
+    bool pagMasInteresante = false; //
+
     for (int i = 0; i < tramo; ++i)
     {
         sol.interesante += v[i];
@@ -46,7 +48,19 @@ auto resolver(std::vector<int> const &v, int const &tramo)
     {
         interesante += v[i] - v[i - tramo];
 
-        if (interesante >= sol.interesante)
+        if (v[i] > sol.masInteresante)
+        {
+            pagMasInteresante = pagMasInteresante || true;
+        }
+
+        sol.masInteresante = std::max(sol.masInteresante, v[i]);
+
+        if (pagMasInteresante)
+        {
+            sol = {interesante, std::max(v[i], sol.masInteresante), i + 1 - tramo};
+            pagMasInteresante = false;
+        }
+        else if (interesante >= sol.interesante)
         {
             sol = {interesante, std::max(v[i], sol.masInteresante), i + 1 - tramo};
         }
