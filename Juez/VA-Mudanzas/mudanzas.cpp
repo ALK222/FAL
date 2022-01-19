@@ -1,9 +1,8 @@
-
+// ALUMNO: Alejandro Barrachina Argudo
 #include <iostream>
 using namespace std;
 
 const int MAX_OBJS = 20;
-
 // Lista con los objetos a portar
 typedef struct
 {
@@ -11,8 +10,6 @@ typedef struct
                             // los tamaños de los objetos
     int n_objetos;          // Numero de objetos
 } tObjetos;
-
-// int totalITS;
 
 /*
 
@@ -41,55 +38,41 @@ a partir de la misma, por inmersión.
 
 
 */
-int numCajas(const int objetos[], const tObjetos objs, const int capacidad)
+
+typedef struct
 {
-    int numCajas = 0;
-    int sumaActual = 0;
-    for (int i = 0; i < objs.n_objetos; ++i)
+    int cajas[MAX_OBJS];
+    int numCajas;
+} tCajas;
+int numCajas(const int objetos[], const tObjetos objs, const int capacidad, int numObjetos)
+{
+    int numCajas = 1;
+    int suma = 0;
+    int sumaActual;
+    for (int i = 0; i < numObjetos; i++)
     {
-        int index = objetos[i];
-        if (sumaActual + objs.tamanios[index] >= capacidad)
+        sumaActual = objetos[i] < 0 ? 0 : objetos[i];
+
+        if (suma + sumaActual > capacidad)
         {
-            sumaActual = sumaActual + objs.tamanios[index] > capacidad ? objs.tamanios[index] : 0;
+            suma = sumaActual;
             numCajas++;
         }
         else
         {
-            sumaActual += objs.tamanios[index];
+            suma += sumaActual;
         }
-    }
-    if (sumaActual > 0)
-    {
-        numCajas++;
     }
     return numCajas;
 }
 
-void actualizarCajas(int cajasUsadas[], int mejoresCajas[], int numObjetos)
-{
-    for (int i = 0; i < numObjetos; ++i)
-    {
-        mejoresCajas[i] = cajasUsadas[i];
-    }
-}
-
-void printList(int a[], int n)
-{
-    for (int i = 0; i < n; ++i)
-    {
-        cout << a[i] << " ";
-    }
-    cout << "\n";
-}
-
-void printBools(bool b[], int n)
-{
-    for (int i = 0; i < n; ++i)
-    {
-        cout << b[i] ? "TRUE " : "FALSE ";
-    }
-    cout << "\n";
-}
+// void actualizarCajas(int cajasUsadas[], int mejoresCajas[], int numObjetos)
+//{
+//     for (int i = 0; i < numObjetos; ++i)
+//     {
+//         mejoresCajas[i] = cajasUsadas[i];
+//     }
+// }
 
 bool contiene(int c[], int n, int obj)
 {
@@ -103,29 +86,43 @@ bool contiene(int c[], int n, int obj)
     return enc;
 }
 
-void resolver(tObjetos objetos, int numObjetos, int capacidad, bool &hay_espacio, int cajasActuales[], int mejoresCajas[])
+void resolver(tObjetos objetos, int numObjetos, int capacidad, bool &hay_espacio, tCajas cajasActuales, int &mejorNumCajas)
 {
     if (numObjetos == objetos.n_objetos)
     {
-        if (!hay_espacio || (numCajas(cajasActuales, objetos, capacidad) < numCajas(mejoresCajas, objetos, capacidad)))
+        // cajasActuales.numCajas = numCajas(cajasActuales.cajas, objetos, capacidad, numObjetos);
+        if (!hay_espacio || cajasActuales.numCajas <= mejorNumCajas)
         {
-            actualizarCajas(cajasActuales, mejoresCajas, objetos.n_objetos);
+            // actualizarCajas(cajasActuales.cajas, mejorNumCajas.cajas, cajasActuales.numCajas);
+            mejorNumCajas = cajasActuales.numCajas;
             hay_espacio = true;
         }
     }
     else
     {
-        for (int objeto = 0; objeto < objetos.n_objetos; ++objeto)
+        for (int index = 0; index <= cajasActuales.numCajas && cajasActuales.numCajas <= objetos.n_objetos + 1; ++index)
         {
-            if (!contiene(cajasActuales, numObjetos, objeto))
+            if (cajasActuales.cajas[index] < 0)
             {
-                // totalITS++;
-                cajasActuales[numObjetos] = objeto;
-                /*printList(mejoresCajas, objetos.n_objetos);
-                printList(cajasActuales, objetos.n_objetos);*/
-                resolver(objetos, numObjetos + 1, capacidad, hay_espacio, cajasActuales, mejoresCajas);
-                // printBools(objetosUsados, objetos.n_objetos);
-                // objetosUsados[objeto] = false;
+                cajasActuales.cajas[index] = 0;
+            }
+            if (cajasActuales.cajas[index] + objetos.tamanios[numObjetos] <= capacidad)
+            {
+                cajasActuales.cajas[index] += objetos.tamanios[numObjetos];
+                resolver(objetos, numObjetos + 1, capacidad, hay_espacio, cajasActuales, mejorNumCajas);
+                // cout << "INDEX: " << index << " NUMOBJT: " << numObjetos << endl;
+                cajasActuales.cajas[index] -= objetos.tamanios[numObjetos];
+                if (cajasActuales.cajas[index] == 0)
+                {
+                    cajasActuales.numCajas--;
+                }
+            }
+            else
+            {
+                if (index == cajasActuales.numCajas - 1)
+                {
+                    cajasActuales.numCajas++;
+                }
             }
         }
     }
@@ -134,15 +131,17 @@ void resolver(tObjetos objetos, int numObjetos, int capacidad, bool &hay_espacio
 int min_numero_de_cajas(const tObjetos &objetos, int capacidad_caja)
 {
     //// A IMPLEMENTAR
-    // bool objetosUsados[MAX_OBJS] = { 0 };
-    ////initUsados(objetosUsados, objetos.n_objetos);
-    int objetosOrdenados[MAX_OBJS];
-    int mejorCombinacion[MAX_OBJS];
+    tCajas cajasOrdenadas;
+    int mejorCombinacion;
+    cajasOrdenadas.numCajas = 1;
+    cajasOrdenadas.cajas[0] = objetos.tamanios[0]; /*
+      mejorCombinacion.numCajas = 0;
+      cajasOrdenadas.cajas[0] = objetos.tamanios[0];*/
     bool hay_espacio = false;
-    objetosOrdenados[0] = 0;
-    resolver(objetos, 1, capacidad_caja, hay_espacio, objetosOrdenados, mejorCombinacion);
-    // cout << totalITS << endl;
-    return numCajas(mejorCombinacion, objetos, capacidad_caja);
+
+    resolver(objetos, 1, capacidad_caja, hay_espacio, cajasOrdenadas, mejorCombinacion);
+
+    return mejorCombinacion; /*numCajas(mejorCombinacion, objetos, capacidad_caja);   */
 }
 
 /* CODIGO PARA LEER Y EJECUTAR LOS CASOS DE PRUEBA */
@@ -159,6 +158,7 @@ bool ejecuta_caso()
         {
             cin >> objetos.tamanios[i];
         }
+
         cout << min_numero_de_cajas(objetos, capacidad) << endl;
         return true;
     }
