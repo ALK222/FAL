@@ -42,15 +42,15 @@ a partir de la misma, por inmersi�n.
 
 */
 
-int calculoSatisfaccion(int listaSatisfaccion[MAX_NINIOS], int numSitios, const int sat[MAX_NINIOS][MAX_NINIOS], int numHermano)
+int calculoSatisfaccion(int listaSatisfaccion[MAX_NINIOS], int numKid, const int sat[MAX_NINIOS][MAX_NINIOS], int numHermano)
 {
     int suma = 0;
     int malAsignado = 0;
     bool tenemosHermano = false;
-    for (int i = 0; i < numSitios; ++i)
+    for (int i = 0; i < numKid; ++i)
     {
         // lista[i] = sitio
-        if ((i % numSitios) == listaSatisfaccion[i])
+        if ((i % numKid) == listaSatisfaccion[i])
         {
             ++malAsignado;
         }
@@ -60,7 +60,7 @@ int calculoSatisfaccion(int listaSatisfaccion[MAX_NINIOS], int numSitios, const 
         }
         suma += sat[listaSatisfaccion[i]][i] > 0 ? sat[listaSatisfaccion[i]][i] : 0;
     }
-    if (malAsignado >= numSitios / 3)
+    if (malAsignado >= numKid / 3)
     {
         return 0;
     }
