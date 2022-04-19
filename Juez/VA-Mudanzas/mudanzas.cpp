@@ -86,45 +86,32 @@ bool contiene(int c[], int n, int obj)
     return enc;
 }
 
-void resolver(tObjetos objetos, int numObjetos, int capacidad, bool &hay_espacio, tCajas cajasActuales, int &mejorNumCajas)
+void resolver(tObjetos objetos, int numObjetos, int capacidad, tCajas cajasActuales, int &mejorNumCajas)
 {
     if (numObjetos == objetos.n_objetos)
     {
-        // cajasActuales.numCajas = numCajas(cajasActuales.cajas, objetos, capacidad, numObjetos);
-        if (!hay_espacio || cajasActuales.numCajas <= mejorNumCajas)
+        if (cajasActuales.numCajas < mejorNumCajas)
         {
-            // actualizarCajas(cajasActuales.cajas, mejorNumCajas.cajas, cajasActuales.numCajas);
             mejorNumCajas = cajasActuales.numCajas;
-            hay_espacio = true;
         }
     }
-    else
+    else if (mejorNumCajas > cajasActuales.numCajas)
     {
-        for (int index = 0; index <= cajasActuales.numCajas && cajasActuales.numCajas <= objetos.n_objetos + 1; ++index)
+        for (int index = 0; index < cajasActuales.numCajas; ++index)
         {
-            if (cajasActuales.cajas[index] < 0)
-            {
-                cajasActuales.cajas[index] = 0;
-            }
-            if (cajasActuales.cajas[index] + objetos.tamanios[numObjetos] <= capacidad)
+            int nuevoTam = cajasActuales.cajas[index] + objetos.tamanios[numObjetos];
+            if (nuevoTam <= capacidad)
             {
                 cajasActuales.cajas[index] += objetos.tamanios[numObjetos];
-                resolver(objetos, numObjetos + 1, capacidad, hay_espacio, cajasActuales, mejorNumCajas);
-                // cout << "INDEX: " << index << " NUMOBJT: " << numObjetos << endl;
+                resolver(objetos, numObjetos + 1, capacidad, cajasActuales, mejorNumCajas);
                 cajasActuales.cajas[index] -= objetos.tamanios[numObjetos];
-                if (cajasActuales.cajas[index] == 0)
-                {
-                    cajasActuales.numCajas--;
-                }
-            }
-            else
-            {
-                if (index == cajasActuales.numCajas - 1)
-                {
-                    cajasActuales.numCajas++;
-                }
             }
         }
+        cajasActuales.numCajas++;
+        cajasActuales.cajas[cajasActuales.numCajas - 1] += objetos.tamanios[numObjetos];
+        resolver(objetos, numObjetos + 1, capacidad, cajasActuales, mejorNumCajas);
+        cajasActuales.cajas[cajasActuales.numCajas - 1] -= objetos.tamanios[numObjetos];
+        cajasActuales.numCajas--;
     }
 }
 
@@ -132,16 +119,16 @@ int min_numero_de_cajas(const tObjetos &objetos, int capacidad_caja)
 {
     //// A IMPLEMENTAR
     tCajas cajasOrdenadas;
-    int mejorCombinacion;
-    cajasOrdenadas.numCajas = 1;
-    cajasOrdenadas.cajas[0] = objetos.tamanios[0]; /*
-      mejorCombinacion.numCajas = 0;
-      cajasOrdenadas.cajas[0] = objetos.tamanios[0];*/
-    bool hay_espacio = false;
+    int mejorCombinacion = objetos.n_objetos;
+    cajasOrdenadas.numCajas = 0;
+    for (int i = 0; i < objetos.n_objetos; ++i)
+    {
+        cajasOrdenadas.cajas[i] = 0;
+    }
 
-    resolver(objetos, 1, capacidad_caja, hay_espacio, cajasOrdenadas, mejorCombinacion);
+    resolver(objetos, 0, capacidad_caja, cajasOrdenadas, mejorCombinacion);
 
-    return mejorCombinacion; /*numCajas(mejorCombinacion, objetos, capacidad_caja);   */
+    return mejorCombinacion;
 }
 
 /* CODIGO PARA LEER Y EJECUTAR LOS CASOS DE PRUEBA */
